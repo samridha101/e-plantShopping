@@ -9,27 +9,56 @@ const CartItem = ({ onContinueShopping }) => {
 
   // Calculate total amount for all products in the cart
   const calculateTotalAmount = () => {
+
+    const cost = parseFloat(item.cost.substring(1)); // Remove $
+    return (cost * item.quantity).toFixed(2);
  
   };
 
   const handleContinueShopping = (e) => {
+
+    onContinueShopping(e);
    
   };
 
 
 
   const handleIncrement = (item) => {
+
+    dispatch(updateQuantity({ name: item.name, quantity: item.quantity + 1 }));
+
   };
 
   const handleDecrement = (item) => {
+
+    if (item.quantity > 1) {
+        dispatch(updateQuantity({ name: item.name, quantity: item.quantity - 1 }));
+      } else {
+        dispatch(removeItem({ name: item.name }));
+      }
    
   };
 
   const handleRemove = (item) => {
+
+    dispatch(removeItem({ name: item.name }));
+
   };
 
   // Calculate total cost based on quantity for an item
   const calculateTotalCost = (item) => {
+
+    let total = 0;
+    cartItems.forEach(item => {
+      const cost = parseFloat(item.cost.substring(1));
+      total += cost * item.quantity;
+    });
+    return total.toFixed(2);
+
+  };
+
+  const handleCheckoutShopping = (e) => {
+    alert('Functionality to be added for future reference');
   };
 
   return (
@@ -37,6 +66,8 @@ const CartItem = ({ onContinueShopping }) => {
       <h2 style={{ color: 'black' }}>Total Cart Amount: ${calculateTotalAmount()}</h2>
       <div>
         {cart.map(item => (
+          <CartItem key={index} item={item} onContinueShopping={onContinueShopping} />
+        ))}  
           <div className="cart-item" key={item.name}>
             <img className="cart-item-image" src={item.image} alt={item.name} />
             <div className="cart-item-details">
